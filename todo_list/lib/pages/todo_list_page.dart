@@ -13,6 +13,8 @@ class _TodoListPageState extends State<TodoListPage> {
   final TextEditingController todoController = TextEditingController();
 
   List<Todo> todos = [];
+  Todo? deletedTodo;
+  int? deletedTodoPos;
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +42,8 @@ class _TodoListPageState extends State<TodoListPage> {
                       onPressed: () {
                         String text = todoController.text;
                         setState(() {
-                          Todo newTodo = Todo(
-                            title: text,
-                            dateTime: DateTime.now()
-                          );
+                          Todo newTodo =
+                              Todo(title: text, dateTime: DateTime.now());
                           todos.add(newTodo);
                         });
                         todoController.clear();
@@ -64,13 +64,11 @@ class _TodoListPageState extends State<TodoListPage> {
                 SizedBox(height: 16),
                 Flexible(
                   child: ListView(
-                    shrinkWrap: true,//Mantem o tamanho da lista mais enxuta possivel
+                    shrinkWrap: true,
+                    //Mantem o tamanho da lista mais enxuta possivel
                     children: [
-                      for(Todo todo in todos)
-                        TodoListItem(
-                          todo: todo,
-                          onDelete: onDelete
-                        ),
+                      for (Todo todo in todos)
+                        TodoListItem(todo: todo, onDelete: onDelete),
                     ],
                   ),
                 ),
@@ -104,9 +102,25 @@ class _TodoListPageState extends State<TodoListPage> {
   }
 
   void onDelete(Todo todo) {
+    deletedTodo = todo;
+    deletedTodoPos = todos.indexOf(todo);
+
     setState(() {
       todos.remove(todo);
     });
-  }
 
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text('Tarefa ${todo.title} foi removida com sucesso'),
+      action: SnackBarAction(
+        label: 'Desfazer',
+        onPressed: () {
+          setState(() {
+            todos.insert(deletedTodoPos!, deletedTodo!);
+          });
+        },
+      ),
+      duration: const Duration(seconds: 5),
+    ));
+  }
 }
