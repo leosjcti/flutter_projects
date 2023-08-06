@@ -82,7 +82,7 @@ class _TodoListPageState extends State<TodoListPage> {
                     ),
                     SizedBox(width: 8),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: showDeleteTodosConfirmationDialog,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
                         padding: EdgeInsets.all(6),
@@ -122,5 +122,38 @@ class _TodoListPageState extends State<TodoListPage> {
       ),
       duration: const Duration(seconds: 5),
     ));
+  }
+
+  void showDeleteTodosConfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Limpar tudo?'),
+        content: Text('Você confirma a exclusão de todas as tarefas?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); //Fecha o dialago
+            },
+            style: TextButton.styleFrom(foregroundColor: Colors.green),
+            child: Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              deleteAllTodos();
+            },
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: Text('Limpar tudo'),
+          ),
+        ],
+      ),
+    );
+  }
+  void deleteAllTodos() {
+    setState(() {
+      todos.clear();
+    });
+
   }
 }
