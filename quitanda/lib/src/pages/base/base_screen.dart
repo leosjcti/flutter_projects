@@ -3,6 +3,8 @@ import 'package:quitanda/src/pages/cart/cart_tab.dart';
 import 'package:quitanda/src/pages/home/home_tab.dart';
 import 'package:quitanda/src/pages/profile/profile_tab.dart';
 
+import '../orders/orders_tab.dart';
+
 class BaseScreen extends StatefulWidget {
   const BaseScreen({super.key});
 
@@ -17,17 +19,11 @@ class _BaseScreenState extends State<BaseScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       //Paginas dos botoes
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: pageController,
-        children: [
-          const HomeTab(),
-          const CartTab(),
-          Container(color: Colors.blue),
-          const ProfileTab()
-        ],
+        children: const [HomeTab(), CartTab(), OrdersTab(), ProfileTab()],
       ),
 
       //Botão de Navegação
