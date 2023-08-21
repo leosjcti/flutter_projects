@@ -20,6 +20,7 @@ class _CartTabState extends State<CartTab> {
   void removeItemFromCart(CartItemModel cartItem) {
     setState(() {
       appData.cartItems.remove(cartItem);
+      utilServices.showToast(message: 'Produto ${cartItem.item.itemName} removido do carrinho');
     });
   }
 
@@ -96,16 +97,19 @@ class _CartTabState extends State<CartTab> {
                       ),
                     ),
                     onPressed: () async {
-                      bool ? result = await showOrderConfirmation();
+                      bool? result = await showOrderConfirmation();
 
-                      if(result ?? false) {
+                      if (result ?? false) {
                         showDialog(
                           context: context,
                           builder: (context) {
-                            return PaymentDialog(order: appData.orders.first,
+                            return PaymentDialog(
+                              order: appData.orders.first,
                             );
                           },
                         );
+                      } else {
+                        utilServices.showToast(message: 'Pedido não confirmado', isError: true,);
                       }
                     },
                     child: const Text(
@@ -127,9 +131,8 @@ class _CartTabState extends State<CartTab> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20)
-          ),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           title: const Text("Confirmação"),
           content: const Text("Deseja realmente concluir o pedido?"),
           actions: [
@@ -142,8 +145,7 @@ class _CartTabState extends State<CartTab> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20)
-                ),
+                    borderRadius: BorderRadius.circular(20)),
               ),
               onPressed: () {
                 Navigator.of(context).pop(true);
