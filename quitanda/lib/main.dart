@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:quitanda/src/pages/auth/sign_in_screen.dart';
-import 'package:quitanda/src/pages/splash/splash_screen.dart';
+import 'package:get/get.dart';
+import 'package:quitanda/src/pages/auth/controller/auth_controller.dart';
+import 'package:quitanda/src/pages/pages_routes/app_pages.dart';
 
 void main() {
+
+  Get.put(AuthController());
+
   runApp(const MyApp());
 }
 
@@ -11,7 +15,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Quitanda',
       theme: ThemeData(
         primarySwatch: Colors.green,
@@ -20,7 +24,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: false,
       ),
       debugShowCheckedModeBanner: false,
-      home: const SplashScreen(),
+      initialRoute: PagesRoutes.splashRoute,
+      getPages: AppPages.pages,
     );
   }
 }
